@@ -1,0 +1,99 @@
+-----------------------------------------
+MinGW/MSYS
+  参考：
+  http://d.hatena.ne.jp/m-hiyama/20100108/1262923866
+
+  > cd D:\yamada\tool\MinGW\msys\1.0\bin
+  > .\sh.exe --login
+  $ . ~/.bashrc
+
+-----------------------------------------
+Git & bash
+  msysgit
+
+  参考：
+    http://d.hatena.ne.jp/xyk/20130920/1379659991
+    日本語の設定
+    http://jutememo.blogspot.jp/2010/07/windows-github-msysgit-tortoisegit.html
+
+  git bash を起動
+
+  .vimrc の編集
+    $ vim ~/.vimrc
+
+      syntax on
+      set number
+      set tabstop=4
+
+  .bashrc の編集
+    $ vim ~/.bashrc
+
+      #alias ls='ls -HF --color=auto'
+      alias ls='/bin/ls --show-control-chars'     ←ファイル名の日本語表示用
+      alias ll='ls -la'
+      alias curl='curl --proxy-ntlm --proxy XXX.XXX.co.jp:8080'     ←curlプロキシ設定（.curlrcに書いてもなぜか反映しないので）
+
+  日本語設定
+    $ vim /etc/inputrc
+
+      # disable/enable 8bit input
+      set meta-flag on
+      #set input-meta on #コメントアウトする
+      set output-meta on # offからonへ
+      set convert-meta off #onからoffへ
+
+  一度ウィンドウを閉じてから再開
+
+  .gitconfig の編集
+    $ vim ~/.gitconfig
+
+      [user]
+        name = k.yamada
+        email = XXXX
+      [alias]
+        ch = checkout
+        co = commit
+        st = status
+        br = branch
+        hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+      [http]
+        proxy=XXXXX
+      [merge]
+              tool = kdiff3
+      [mergetool "kdiff3"]
+              path = C:/Program Files/KDiff3/kdiff3.exe
+      [diff]
+              guitool = kdiff3
+      [difftool "kdiff3"]
+              path = C:/Program Files/KDiff3/kdiff3.exe
+      [core]
+              editor = \"C:/Program Files/GitExtensions/GitExtensions.exe\" fileeditor
+              autocrlf = false
+      [credential]
+              helper = !\"C:/Program Files/GitExtensions/GitCredentialWinStore/git-credential-winstore.exe\"
+
+
+------------------------------------------
+nvm
+  $ git clone https://github.com/creationix/nvm.git ~/.nvm
+
+  $ vi ~/.bashrc
+
+    以下の行を追加
+    source ~/.nvm/nvm.sh
+
+------------------------------------------
+npm（msys用）
+  windows版(zip)をダウンロードして、node.exeの置いてあるところ（.nvm\v0.11.8\bin）に展開
+    http://nodejs.org/dist/npm/
+
+    以下をnpmとして新規作成し.nvm\v0.11.8\bin下に保存（シェル中のハードコードしているパスは適宜変更する）
+      #!/bin/sh
+      basedir="D:\yamada\tool\MinGW\msys\1.0\home\9W3DW\.nvm\v0.11.8\bin"
+
+      if [ -x "$basedir/node.exe" ]; then
+        "$basedir/node.exe" "$basedir/node_modules/npm/bin/npm-cli.js" "$@"
+      else
+        node "$basedir/node_modules/npm/bin/npm-cli.js" "$@"
+      fi
+
